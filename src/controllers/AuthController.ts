@@ -20,10 +20,12 @@ class AuthController {
         .where('user.username = :username', { username })
         .getOne();
     } catch (error) {
-      res.status(401).send();
+      console.log('401 login');
+      res.status(401).send('Error while login');
     }
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-      res.status(401).send();
+      console.log('401 password');
+      res.status(401).send('Error while encrypting password');
       return;
     }
     const token = jwt.sign({ userId: user.id, username: user.username }, config.jwtSecret, {
@@ -47,10 +49,12 @@ class AuthController {
         .where('user.id = :id', { id })
         .getOne();
     } catch (id) {
-      res.status(401).send();
+      console.log('401 user not found');
+      res.status(401).send('User not found!');
     }
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      res.status(401).send();
+      console.log('401 encrypt password');
+      res.status(401).send('Problem encrypting password');
       return;
     }
     user.password = newPassword;
